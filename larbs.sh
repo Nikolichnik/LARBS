@@ -217,6 +217,11 @@ systembeepoff
 chsh -s /bin/zsh "$name" >/dev/null 2>&1
 sudo -u "$name" mkdir -p "/home/$name/.cache/zsh/"
 
+# Download and install cutom font
+sudo mkdir -p /usr/share/fonts/sauce-code-pro && cd "$_"
+sudo curl https://github.com/Nikolichnik/sauce-code-pro/raw/master/SauceCodePro.otf --output SauceCodePro-Regular.otf
+sudo chmod 644 ../sauce-code-pro/*
+
 # dbus UUID must be generated for Artix runit.
 dbus-uuidgen > /var/lib/dbus/machine-id
 
