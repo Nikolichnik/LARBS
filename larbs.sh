@@ -219,9 +219,15 @@ chsh -s /bin/zsh "$name" >/dev/null 2>&1
 sudo -u "$name" mkdir -p "/home/$name/.cache/zsh/"
 
 # Download and install cutom font
-sudo mkdir -p /usr/share/fonts/sauce-code-pro && cd "$_"
-sudo curl https://github.com/Nikolichnik/sauce-code-pro/raw/master/SauceCodePro.otf --output SauceCodePro-Regular.otf
-sudo chmod 644 ../sauce-code-pro/*
+mkdir -p /usr/share/fonts/sauce-code-pro && cd "$_"
+curl https://github.com/Nikolichnik/sauce-code-pro/raw/master/SauceCodePro.otf --output SauceCodePro-Regular.otf
+chmod 644 ../sauce-code-pro/*
+
+# Download and install nvim colorschemes
+git clone https://github.com/arzg/vim-colors-xcode.git
+# cp -r vim-colors-xcode/{autoload,colors,doc} ~/.config/nvim
+cp -r vim-colors-xcode/{colors,doc} ~/.config/nvim
+rm -rf vim-colors-xcode
 
 # dbus UUID must be generated for Artix runit.
 dbus-uuidgen > /var/lib/dbus/machine-id
