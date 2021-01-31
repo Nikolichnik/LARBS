@@ -92,7 +92,7 @@ gitmakeinstall() {
 	progname="$(basename "$1" .git)"
 	dir="$repodir/$progname"
 	branch="${2:-master}"
-	dialog --title "LARBS Installation" --infobox "Installing \`$progname\` ($n of $total) via \`git\` and \`make\`. $(basename "$1") $3" 5 70
+	dialog --title "LARBS Installation" --infobox "Installing \`$progname\`, branch \'$branch\', ($n of $total) via \`git\` and \`make\`. $(basename "$1") $3" 5 70
 	sudo -u "$name" git clone -b "$branch" --depth 1 "$1" "$dir" >/dev/null 2>&1 || { cd "$dir" || return 1 ; sudo -u "$name" git pull --force origin "$branch";}
 	cd "$dir" || exit 1
 	make >/dev/null 2>&1
