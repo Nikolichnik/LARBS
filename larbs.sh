@@ -91,8 +91,9 @@ maininstall() { # Installs all needed programs from main repo.
 gitmakeinstall() {
 	progname="$(basename "$1" .git)"
 	dir="$repodir/$progname"
-	dialog --title "LARBS Installation" --infobox "Installing \`$progname\` ($n of $total) via \`git\` and \`make\`. $(basename "$1") $2" 5 70
-	sudo -u "$name" git clone --depth 1 "$1" "$dir" >/dev/null 2>&1 || { cd "$dir" || return 1 ; sudo -u "$name" git pull --force origin master;}
+	branch="${2:-master}"
+	dialog --title "LARBS Installation" --infobox "Installing \`$progname\` ($n of $total) via \`git\` and \`make\`. $(basename "$1") $3" 5 70
+	sudo -u "$name" git clone -b "$branch" --depth 1 "$1" "$dir" >/dev/null 2>&1 || { cd "$dir" || return 1 ; sudo -u "$name" git pull --force origin "$branch";}
 	cd "$dir" || exit 1
 	make >/dev/null 2>&1
 	make install >/dev/null 2>&1
@@ -114,12 +115,12 @@ installationloop() { \
 	([ -f "$progsfile" ] && cp "$progsfile" /tmp/progs.csv) || curl -Ls "$progsfile" | sed '/^#/d' > /tmp/progs.csv
 	total=$(wc -l < /tmp/progs.csv)
 	aurinstalled=$(pacman -Qqm)
-	while IFS=, read -r tag program comment; do
+	while IFS=, read -r tag branch program comment; do
 		n=$((n+1))
 		echo "$comment" | grep -q "^\".*\"$" && comment="$(echo "$comment" | sed "s/\(^\"\|\"$\)//g")"
 		case "$tag" in
 			"A") aurinstall "$program" "$comment" ;;
-			"G") gitmakeinstall "$program" "$comment" ;;
+			"G") gitmakeinstall "$program" "$branch" "$comment" ;;
 			"P") pipinstall "$program" "$comment" ;;
 			*) maininstall "$program" "$comment" ;;
 		esac
